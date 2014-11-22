@@ -42,25 +42,7 @@ Assuming the following folder structure:
 
 Issuing the command below will produce the following output:
 
-    $ unlike -svm f1/ f2/
-    Reading "f1/"...
-    ++
-    Reading "f2/"...
-    +++
-    
-    Results
-      Files in f1/: 2
-      Files in f2/: 3
-      File count after merge: 3
-      Only in [f2/]:
-        d
-      Different sizes in each folder:
-        [0, 4] b
-        Total: 1 file
-      Different modified dates in each folder:
-        [Sat Nov 22 2014 01:28:01 GMT-0200 (BRST), Sat Nov 22 2014 01:28:33 GMT-0200 (BRST)] a
-        [Sat Nov 22 2014 01:28:10 GMT-0200 (BRST), Sat Nov 22 2014 01:28:41 GMT-0200 (BRST)] b
-        Total: 2 files
+![command output](https://cloud.githubusercontent.com/assets/6631859/5152924/c195b8c4-71f1-11e4-939b-cf6dad1cf3ba.png)
 
 ## To do
 
