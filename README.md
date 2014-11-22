@@ -10,7 +10,7 @@ folder to the other. ``unlike`` is safe to use; it will not change the contents 
 
     npm install --global unlike
 
-*Note: let me know if it works in Windows!*
+It should work fine in Linux and OSX. I don't expect it to work in Windows because I haven't tested yet. Let me know if it does.
 
 ## How to use
 
