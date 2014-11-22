@@ -19,6 +19,18 @@ What ``unlike`` understands as "different":
 
     unlike [options] <source_dir> <dest_dir>
 
+Available options:
+
+* ``-s``, ``--size``: compare file sizes
+* ``-a``, ``--atime``: compare file access times
+* ``-m``, ``--mtime``: compare file modified times
+* ``-c``, ``--ctime``: compare file change times
+* ``-v``, ``--verbose``: toggle verbose mode
+
+If no option is passed, ``unlike`` treats files as equal sufficing that their names are equal, even if their sizes differ.
+
+Beware option ``-c`` does not compare file *creation* times, but file *change* times! See [what Google has to say about it](https://www.google.com/#q=Difference+between+mtime%2C+ctime+and+atime).
+
 ## Example
 
 Assuming the following folder structure:
