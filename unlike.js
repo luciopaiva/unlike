@@ -15,7 +15,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
         onlyLeft = [],
         onlyRight = [],
         equalFiles = [],
-        creationDatesDiffer = [],
+        changeDatesDiffer = [],
         modifiedDatesDiffer = [],
         accessDatesDiffer = [],
         sizesDiffer = [];
@@ -94,13 +94,13 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
         console.info('    Total: %s files', chalk.yellow(accessDatesDiffer.length));
     }
 
-    if (creationDatesDiffer.length > 0) {
+    if (changeDatesDiffer.length > 0) {
 
         console.info('  Different creation times in each folder:');
-        creationDatesDiffer.forEach(function (filename) {
+        changeDatesDiffer.forEach(function (filename) {
             console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.ctime), chalk.yellow(merge[filename].right.ctime), filename);
         });
-        console.info('    Total: %s files', chalk.yellow(creationDatesDiffer.length));
+        console.info('    Total: %s files', chalk.yellow(changeDatesDiffer.length));
     }
 
     if (modifiedDatesDiffer.length > 0) {
@@ -133,8 +133,8 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
                 match = false;
             }
 
-            if (options.ctime && file.diff.differsInCreationDate) {
-                creationDatesDiffer.push(filename);
+            if (options.ctime && file.diff.differsInChangeDate) {
+                changeDatesDiffer.push(filename);
                 match = false;
             }
 
