@@ -1,12 +1,26 @@
 {
   "name": "unlike",
   "version": "0.1.0",
-  "description": "Shows differences between two directories",
+  "description": "Shows differences between two folders",
   "main": "unlike.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lucio Paiva <lucio@luciopaiva.com> (http://github.com/luciopaiva)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luciopaiva/unlike.git"
+  },
+  "keywords": [
+    "folder",
+    "directory",
+    "diff",
+    "difference"
+  ],
+  "bugs": {
+    "url": "https://github.com/luciopaiva/unlike/issues"
+  },
+  "homepage": "https://github.com/luciopaiva/unlike",
   "license": "MIT",
   "dependencies": {
     "chalk": "^0.5.1"
