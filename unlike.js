@@ -34,7 +34,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
         if (equalFiles.length > 10) {
 
-            console.info('    %s files match', chalk.yellow(equalFiles.length));
+            console.info('    Total: %s file%s', chalk.yellow(equalFiles.length), equalFiles.length > 1 ? 's' : '');
 
         } else {
 
@@ -50,7 +50,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
         if (onlyLeft.length > 10) {
 
-            console.info('    %s files match', chalk.yellow(equalFiles.length));
+            console.info('    Total: %s file%s', chalk.yellow(onlyLeft.length), onlyLeft.length > 1 ? 's' : '');
 
         } else {
 
@@ -66,7 +66,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
         if (onlyRight.length > 10) {
 
-            console.info('    %s files match', chalk.yellow(equalFiles.length));
+            console.info('    Total: %s file%s', chalk.yellow(onlyRight.length), onlyRight.length > 1 ? 's' : '');
 
         } else {
 
@@ -82,34 +82,34 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
         sizesDiffer.forEach(function (filename) {
             console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.size), chalk.yellow(merge[filename].right.size), filename);
         });
-        console.info('    Total: %s files', chalk.yellow(sizesDiffer.length));
+        console.info('    Total: %s file%s', chalk.yellow(sizesDiffer.length), sizesDiffer.length > 1 ? 's' : '');
     }
 
     if (accessDatesDiffer.length > 0) {
 
-        console.info('  Different access times in each folder:');
+        console.info('  Different access dates in each folder:');
         accessDatesDiffer.forEach(function (filename) {
             console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.atime), chalk.yellow(merge[filename].right.atime), filename);
         });
-        console.info('    Total: %s files', chalk.yellow(accessDatesDiffer.length));
+        console.info('    Total: %s file%s', chalk.yellow(accessDatesDiffer.length), accessDatesDiffer.length > 1 ? 's' : '');
     }
 
     if (changeDatesDiffer.length > 0) {
 
-        console.info('  Different creation times in each folder:');
+        console.info('  Different change dates in each folder:');
         changeDatesDiffer.forEach(function (filename) {
             console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.ctime), chalk.yellow(merge[filename].right.ctime), filename);
         });
-        console.info('    Total: %s files', chalk.yellow(changeDatesDiffer.length));
+        console.info('    Total: %s file%s', chalk.yellow(changeDatesDiffer.length), changeDatesDiffer.length > 1 ? 's' : '');
     }
 
     if (modifiedDatesDiffer.length > 0) {
 
-        console.info('  Different modified times in each folder:');
+        console.info('  Different modified dates in each folder:');
         modifiedDatesDiffer.forEach(function (filename) {
             console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.mtime), chalk.yellow(merge[filename].right.mtime), filename);
         });
-        console.info('    Total: %s files', chalk.yellow(modifiedDatesDiffer.length));
+        console.info('    Total: %s file%s', chalk.yellow(modifiedDatesDiffer.length), modifiedDatesDiffer.length > 1 ? 's' : '');
     }
 
     function parseFileDiff(filename) {
