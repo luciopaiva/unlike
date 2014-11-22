@@ -23,7 +23,8 @@
   "homepage": "https://github.com/luciopaiva/unlike",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^0.5.1"
+    "chalk": "^0.5.1",
+    "minimist": "^1.1.0"
   },
   "bin": {
     "unlike": "unlike.js"
