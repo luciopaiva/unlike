@@ -6,14 +6,11 @@ Command line tool to point differences between two folders.
 ``unlike`` will compare both folders and give a detailed description of what is different from one 
 folder to the other. ``unlike`` is safe to use; it will not change the contents of any folder.
 
-What ``unlike`` understands as "different":
-
-* files that exist only in one of the folders
-* files that have different sizes
-
 ## Installation
 
     npm install --global unlike
+
+*Note: let me know if it works in Windows!*
 
 ## How to use
 
