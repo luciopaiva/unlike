@@ -152,13 +152,14 @@ function processArgs() {
 
     minimistOptions = {
         boolean: [
-            'c', 'a', 'm', 's', 'ctime', 'atime', 'mtime', 'size'
+            'c', 'a', 'm', 's', 'v', 'ctime', 'atime', 'mtime', 'size', 'verbose'
         ],
         alias: {
             c: 'ctime',
             a: 'atime',
             m: 'mtime',
-            s: 'size'
+            s: 'size',
+            v: 'verbose'
         }
     };
 
@@ -175,11 +176,8 @@ function main(args) {
 
     } else {
 
-        console.error(chalk.gray('Reading "%s"...'), args._[0]);
-        left = parse(args._[0]);
-
-        console.error(chalk.gray('Reading "%s"...'), args._[1]);
-        right = parse(args._[1]);
+        left = parse(args._[0], args.verbose);
+        right = parse(args._[1], args.verbose);
 
         merge = mergeAndDiff(left, right);
 
