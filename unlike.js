@@ -3,6 +3,7 @@
 var
     chalk = require('chalk'),
     minimist = require('minimist'),
+    async = require('async'),
     parse = require('./lib/parse'),
     mergeAndDiff = require('./lib/diffmerge');
 
@@ -18,6 +19,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
         changeDatesDiffer = [],
         modifiedDatesDiffer = [],
         accessDatesDiffer = [],
+        checksumsDiffer = [],
         sizesDiffer = [];
 
     Object.keys(merge).sort().forEach(parseFileDiff);
@@ -80,16 +82,25 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
         console.info('  Different sizes in each folder:');
         sizesDiffer.forEach(function (filename) {
-            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.size), chalk.yellow(merge[filename].right.size), filename);
+            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.stat.size), chalk.yellow(merge[filename].right.stat.size), filename);
         });
         console.info('    Total: %s file%s', chalk.yellow(sizesDiffer.length), sizesDiffer.length > 1 ? 's' : '');
+    }
+
+    if (checksumsDiffer.length > 0) {
+
+        console.info('  Different checksums in each folder:');
+        checksumsDiffer.forEach(function (filename) {
+            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.checksum), chalk.yellow(merge[filename].right.checksum), filename);
+        });
+        console.info('    Total: %s file%s', chalk.yellow(checksumsDiffer.length), checksumsDiffer.length > 1 ? 's' : '');
     }
 
     if (accessDatesDiffer.length > 0) {
 
         console.info('  Different access dates in each folder:');
         accessDatesDiffer.forEach(function (filename) {
-            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.atime), chalk.yellow(merge[filename].right.atime), filename);
+            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.stat.atime), chalk.yellow(merge[filename].right.stat.atime), filename);
         });
         console.info('    Total: %s file%s', chalk.yellow(accessDatesDiffer.length), accessDatesDiffer.length > 1 ? 's' : '');
     }
@@ -98,7 +109,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
         console.info('  Different change dates in each folder:');
         changeDatesDiffer.forEach(function (filename) {
-            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.ctime), chalk.yellow(merge[filename].right.ctime), filename);
+            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.stat.ctime), chalk.yellow(merge[filename].right.stat.ctime), filename);
         });
         console.info('    Total: %s file%s', chalk.yellow(changeDatesDiffer.length), changeDatesDiffer.length > 1 ? 's' : '');
     }
@@ -107,7 +118,7 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
         console.info('  Different modified dates in each folder:');
         modifiedDatesDiffer.forEach(function (filename) {
-            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.mtime), chalk.yellow(merge[filename].right.mtime), filename);
+            console.info('    [%s, %s] %s', chalk.yellow(merge[filename].left.stat.mtime), chalk.yellow(merge[filename].right.stat.mtime), filename);
         });
         console.info('    Total: %s file%s', chalk.yellow(modifiedDatesDiffer.length), modifiedDatesDiffer.length > 1 ? 's' : '');
     }
@@ -125,6 +136,11 @@ function printDiff(merge, left, right, leftPath, rightPath, options) {
 
             if (options.size && file.diff.differsInSize) {
                 sizesDiffer.push(filename);
+                match = false;
+            }
+
+            if (options.hash && file.diff.differsInChecksum) {
+                checksumsDiffer.push(filename);
                 match = false;
             }
 
@@ -156,13 +172,14 @@ function processArgs() {
 
     minimistOptions = {
         boolean: [
-            'c', 'a', 'm', 's', 'v', 'ctime', 'atime', 'mtime', 'size', 'verbose'
+            'c', 'a', 'm', 's', 'h', 'v', 'ctime', 'atime', 'mtime', 'size', 'hash', 'verbose'
         ],
         alias: {
             c: 'ctime',
             a: 'atime',
             m: 'mtime',
             s: 'size',
+            h: 'hash',
             v: 'verbose'
         }
     };
@@ -172,7 +189,7 @@ function processArgs() {
 
 function main(args) {
     var
-        left, right, merge;
+        options;
 
     if (args._.length < 2) {
 
@@ -180,12 +197,46 @@ function main(args) {
 
     } else {
 
-        left = parse(args._[0], args.verbose);
-        right = parse(args._[1], args.verbose);
+        options = {
+            verbose: args.verbose,
+            wantsChecksum: args.hash
+        };
 
-        merge = mergeAndDiff(left, right);
+        async.series([
+            //function (cb) {
+            //    parse(args._[0], options, cb);
+            //},
+            //function (cb) {
+            //    parse(args._[1], options, cb);
+            //}
+            parseFolder.bind(null, args._[0]),
+            parseFolder.bind(null, args._[1])
+        ], function (err, results) {
+            var
+                left, right, merge;
 
-        printDiff(merge, left, right, args._[0], args._[1], args);
+            if (!err) {
+
+                if (results.length != 2) {
+                    throw new Error('Error parsing input directories');
+                }
+
+                left = results[0];
+                right = results[1];
+
+                merge = mergeAndDiff(left, right);
+
+                printDiff(merge, left, right, args._[0], args._[1], args);
+
+            } else {
+
+                throw err;
+            }
+        });
+    }
+
+    function parseFolder(folder, cb) {
+        parse(folder, options, cb);
     }
 }
 
